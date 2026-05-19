@@ -70,6 +70,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                         {session ? (
                             <>
                                 <Link href="/dashboard" className="hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors">Panel</Link>
+                                <Link href="/sessions" className="hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors">Historial</Link>
                                 <Link
                                     href="/profile"
                                     className="hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors"
@@ -150,6 +151,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                                     className="block px-3 py-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900/80 text-zinc-700 dark:text-zinc-300 font-semibold transition-colors"
                                 >
                                     Panel
+                                </Link>
+                                <Link
+                                    href="/sessions"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="block px-3 py-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900/80 text-zinc-700 dark:text-zinc-300 font-semibold transition-colors"
+                                >
+                                    Historial
                                 </Link>
                                 <Link
                                     href="/profile"

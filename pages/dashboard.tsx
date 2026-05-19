@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import { auth } from "@/auth";
 import { supabase } from "@/lib/supabase";
 import {
     Zap, ZapOff, Users, UserPlus, Plus, Check, X,
     AlertTriangle, Play, Square, Compass, Clock, Send,
-    Shield, CheckCircle2, User, Loader2, ChevronDown, ChevronUp
+    Shield, CheckCircle2, User, Loader2, ChevronDown, ChevronUp,
+    History, Search
 } from "lucide-react";
 
 interface DashboardProps {
@@ -23,6 +24,14 @@ interface DashboardProps {
 export default function DashboardPage({ session }: DashboardProps) {
     const user = session.user;
     const userId = user?.id;
+
+    // Journeys & Session History States
+    const [journeyType, setJourneyType] = useState<"Presencial" | "Remoto">("Presencial");
+    const [sessionHistory, setSessionHistory] = useState<any[]>([]);
+    const [historyExpanded, setHistoryExpanded] = useState<boolean>(true);
+    const [sessionSearch, setSessionSearch] = useState("");
+    const [statusFilter, setStatusFilter] = useState<"all" | "active" | "completed">("all");
+    const [expandedSessions, setExpandedSessions] = useState<Record<number, boolean>>({});
 
     // Loading & Notification states
     const [loading, setLoading] = useState(true);
@@ -168,6 +177,88 @@ export default function DashboardPage({ session }: DashboardProps) {
         }
     }, [selectedGroupId, sessionReady]);
 
+    // Helper to calculate and format duration between two times (live counting if end is null)
+    const formatDuration = (startStr: string, endStr: string | null) => {
+        const start = new Date(startStr).getTime();
+        const end = endStr ? new Date(endStr).getTime() : new Date().getTime();
+        const diffMs = Math.max(0, end - start);
+        const hours = Math.floor(diffMs / 3600000);
+        const minutes = Math.floor((diffMs % 3600000) / 60000);
+        const seconds = Math.floor((diffMs % 60000) / 1000);
+        const pad = (num: number) => String(num).padStart(2, "0");
+        return pad(hours) + ":" + pad(minutes) + ":" + pad(seconds);
+    };
+
+    // Toggle session detail collapse
+    const toggleSessionExpand = (sessionId: number) => {
+        setExpandedSessions((prev) => ({
+            ...prev,
+            [sessionId]: !prev[sessionId]
+        }));
+    };
+
+    // Fetch the historical list of sessions and individual journeys for the selected group
+    const fetchSessionHistory = async () => {
+        if (!selectedGroupId || !sessionReady) {
+            setSessionHistory([]);
+            return;
+        }
+
+        try {
+            const { data: sessions, error } = await supabase
+                .from("sessions")
+                .select(`
+                    *,
+                    journey (
+                        id,
+                        profile_id,
+                        active,
+                        start,
+                        end,
+                        type,
+                        profiles (
+                            id,
+                            name,
+                            first_name,
+                            last_name,
+                            email
+                        )
+                    )
+                `)
+                .eq("group_id", parseInt(selectedGroupId))
+                .order("created_at", { ascending: false });
+
+            if (error) throw error;
+            setSessionHistory(sessions || []);
+        } catch (err) {
+            console.error("Error fetching session history:", err);
+        }
+    };
+
+    // Filters session history based on query and status filter
+    const getFilteredSessions = () => {
+        return sessionHistory.filter((sess) => {
+            if (statusFilter === "active" && !sess.active) return false;
+            if (statusFilter === "completed" && sess.active) return false;
+
+            if (sessionSearch.trim() !== "") {
+                const searchLower = sessionSearch.toLowerCase();
+                const matchesSessionId = String(sess.id).includes(searchLower);
+                const matchesJourneys = (sess.journey || []).some((j: any) => {
+                    const profile = j.profiles;
+                    if (!profile) return false;
+                    const fullName = (profile.first_name || "" + " " + profile.last_name || "").toLowerCase();
+                    const email = (profile.email || "").toLowerCase();
+                    const journeyTypeVal = (j.type || "").toLowerCase();
+                    return fullName.includes(searchLower) || email.includes(searchLower) || journeyTypeVal.includes(searchLower);
+                });
+                return matchesSessionId || matchesJourneys;
+            }
+
+            return true;
+        });
+    };
+
     const fetchActiveSessionData = async () => {
         if (!selectedGroupId || !userId || !sessionReady) {
             setActiveSession(null);
@@ -257,6 +348,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                 setActiveJourney(null);
                 setSessionMembers([]);
             }
+            await fetchSessionHistory();
         } catch (err: any) {
             console.error("Error fetching session state:", err);
         }
@@ -512,7 +604,8 @@ export default function DashboardPage({ session }: DashboardProps) {
                         session_id: activeSession.id,
                         profile_id: userId,
                         active: true,
-                        start: new Date().toISOString()
+                        start: new Date().toISOString(),
+                        type: journeyType
                     });
 
                 if (error) throw error;
@@ -883,10 +976,46 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                             </div>
                                                         </div>
 
-                                                        {activeJourney && (
-                                                            <div className="text-xs text-amber-650 dark:text-amber-400 font-medium flex items-center gap-1.5">
-                                                                <Clock className="h-3.5 w-3.5" />
-                                                                <span>Jornada iniciada: {new Date(activeJourney.start).toLocaleTimeString("es-ES")}</span>
+                                                        {activeJourney ? (
+                                                            <div className="space-y-2">
+                                                                <div className="text-xs text-amber-650 dark:text-amber-400 font-medium flex items-center gap-1.5">
+                                                                    <Clock className="h-3.5 w-3.5" />
+                                                                    <span>Jornada iniciada: {new Date(activeJourney.start).toLocaleTimeString("es-ES")}</span>
+                                                                </div>
+                                                                <div className="text-xs font-semibold text-zinc-650 dark:text-zinc-350 flex items-center gap-1.5">
+                                                                    <span>Tipo:</span>
+                                                                    <span className="px-2 py-0.5 rounded-full text-[9px] uppercase font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">{activeJourney.type || "Presencial"}</span>
+                                                                </div>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="space-y-2 pt-1.5 border-t border-zinc-150/40 dark:border-zinc-800/30">
+                                                                <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                                                                    Tipo de Jornada
+                                                                </label>
+                                                                <div className="flex gap-2">
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => setJourneyType("Presencial")}
+                                                                        className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
+                                                                            journeyType === "Presencial"
+                                                                                ? "bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400"
+                                                                                : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
+                                                                        }`}
+                                                                    >
+                                                                        🏢 Presencial
+                                                                    </button>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => setJourneyType("Remoto")}
+                                                                        className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
+                                                                            journeyType === "Remoto"
+                                                                                ? "bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400"
+                                                                                : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
+                                                                        }`}
+                                                                    >
+                                                                        🏠 Remoto
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         )}
                                                     </div>
@@ -952,6 +1081,11 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                                     <p className="text-[10px] text-zinc-400 dark:text-zinc-500 truncate">
                                                                         {member.email}
                                                                     </p>
+                                                                    {member.activeJourney && (
+                                                                        <p className="text-[9px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide mt-0.5">
+                                                                            {member.activeJourney.type === "Remoto" ? "🏠 Remoto" : "🏢 Presencial"}
+                                                                        </p>
+                                                                    )}
                                                                 </div>
                                                             </div>
 
@@ -1009,7 +1143,8 @@ export default function DashboardPage({ session }: DashboardProps) {
                     </div>
                 </div>
 
-                {/* Administrar Grupos Panel (Debajo de la tarjeta principal, w-full) */}
+
+                                {/* Administrar Grupos Panel (Debajo de la tarjeta principal, w-full) */}
                 <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 dark:border-zinc-800/80 dark:bg-zinc-900/50 backdrop-blur-xl space-y-6 transition-all duration-300 w-full shadow-sm">
                     <button
                         onClick={() => setGroupsExpanded(!groupsExpanded)}
