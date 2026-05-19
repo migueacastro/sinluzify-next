@@ -41,13 +41,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.accessToken = (user as any).accessToken
+                token.accessToken = (user as any).accessToken;
+                token.id = user.id;
             }
-            return token
+            return token;
         },
         async session({ session, token }) {
-            (session as any).accessToken = token.accessToken
-            return session
+            (session as any).accessToken = token.accessToken;
+            if (session.user) {
+                session.user.id = token.id as string;
+            }
+            return session;
         }
     },
     pages: {

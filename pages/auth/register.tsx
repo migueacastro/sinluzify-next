@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { Mail, Lock, Loader2, ArrowRight, UserPlus, ShieldAlert, CheckCircle2 } from "lucide-react";
+import { Mail, Lock, Loader2, ArrowRight, UserPlus, ShieldAlert, CheckCircle2, User } from "lucide-react";
 
 export default function RegisterPage() {
     const router = useRouter();
@@ -16,6 +16,8 @@ export default function RegisterPage() {
         setError(null);
 
         const formData = new FormData(event.currentTarget);
+        const firstName = formData.get("firstName") as string;
+        const lastName = formData.get("lastName") as string;
         const email = formData.get("email") as string;
         const password = formData.get("password") as string;
         const confirmPassword = formData.get("confirmPassword") as string;
@@ -36,6 +38,13 @@ export default function RegisterPage() {
             const { data, error: signUpError } = await supabase.auth.signUp({
                 email,
                 password,
+                options: {
+                    data: {
+                        first_name: firstName,
+                        last_name: lastName,
+                        name: `${firstName} ${lastName}`.trim(),
+                    }
+                }
             });
 
             if (signUpError) {
@@ -110,6 +119,48 @@ export default function RegisterPage() {
                         )}
 
                         <div className="space-y-5">
+                            {/* Nombre y Apellido Fields (Side-by-side) */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label htmlFor="firstName" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                                        Nombre
+                                    </label>
+                                    <div className="relative mt-1.5 rounded-lg shadow-sm">
+                                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                            <User className="h-5 w-5 text-zinc-400" />
+                                        </div>
+                                        <input
+                                            id="firstName"
+                                            name="firstName"
+                                            type="text"
+                                            required
+                                            placeholder="Juan"
+                                            disabled={loading}
+                                            className="block w-full rounded-lg border border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm text-zinc-900 placeholder-zinc-400 outline-none transition-all focus:border-zinc-900 focus:bg-white focus:ring-1 focus:ring-zinc-900 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950/50 dark:text-zinc-50 dark:focus:border-zinc-50 dark:focus:bg-zinc-950 dark:focus:ring-zinc-50"
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label htmlFor="lastName" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                                        Apellido
+                                    </label>
+                                    <div className="relative mt-1.5 rounded-lg shadow-sm">
+                                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                            <User className="h-5 w-5 text-zinc-400" />
+                                        </div>
+                                        <input
+                                            id="lastName"
+                                            name="lastName"
+                                            type="text"
+                                            required
+                                            placeholder="Pérez"
+                                            disabled={loading}
+                                            className="block w-full rounded-lg border border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm text-zinc-900 placeholder-zinc-400 outline-none transition-all focus:border-zinc-900 focus:bg-white focus:ring-1 focus:ring-zinc-900 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950/50 dark:text-zinc-50 dark:focus:border-zinc-50 dark:focus:bg-zinc-950 dark:focus:ring-zinc-50"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* Email Field */}
                             <div>
                                 <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">

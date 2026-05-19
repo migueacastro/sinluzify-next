@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import { signOut } from "next-auth/react";
 import { auth } from "@/auth";
+import { supabase } from "@/lib/supabase";
 import { User, Mail, ShieldCheck, LogOut, Key, Calendar } from "lucide-react";
 
 interface ProfileProps {
@@ -12,15 +13,31 @@ interface ProfileProps {
         };
         expires?: string;
     };
+    profile: {
+        id: string;
+        first_name?: string;
+        last_name?: string;
+        email?: string;
+        name?: string;
+        avatar_url?: string;
+    } | null;
 }
 
-export default function ProfilePage({ session }: ProfileProps) {
+export default function ProfilePage({ session, profile }: ProfileProps) {
     const user = session.user;
 
-    // Get user initials for the avatar placeholder
+    // Get user initials for the avatar placeholder using first/last name or email
     const getInitials = () => {
-        if (!user?.email) return "U";
-        return user.email.slice(0, 2).toUpperCase();
+        if (profile?.first_name && profile?.last_name) {
+            return (profile.first_name[0] + profile.last_name[0]).toUpperCase();
+        }
+        if (profile?.name) {
+            return profile.name.slice(0, 2).toUpperCase();
+        }
+        if (user?.email) {
+            return user.email.slice(0, 2).toUpperCase();
+        }
+        return "U";
     };
 
     return (
@@ -50,7 +67,9 @@ export default function ProfilePage({ session }: ProfileProps) {
                         {/* Details */}
                         <div className="text-center sm:text-left space-y-1">
                             <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-                                {user?.name || "Usuario Activo"}
+                                {profile?.first_name && profile?.last_name 
+                                    ? `${profile.first_name} ${profile.last_name}`
+                                    : profile?.name || user?.name || "Usuario Activo"}
                             </h3>
                             <div className="flex flex-wrap justify-center sm:justify-start gap-2">
                                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400">
@@ -66,6 +85,28 @@ export default function ProfilePage({ session }: ProfileProps) {
 
                     {/* Meta Fields Grid */}
                     <div className="grid gap-6 sm:grid-cols-2">
+                        {/* Nombre */}
+                        <div className="space-y-1.5">
+                            <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                                <User className="h-4 w-4" />
+                                Nombre
+                            </span>
+                            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                                {profile?.first_name || "No disponible"}
+                            </p>
+                        </div>
+
+                        {/* Apellido */}
+                        <div className="space-y-1.5">
+                            <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                                <User className="h-4 w-4" />
+                                Apellido
+                            </span>
+                            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+                                {profile?.last_name || "No disponible"}
+                            </p>
+                        </div>
+
                         {/* Email */}
                         <div className="space-y-1.5">
                             <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
@@ -73,7 +114,7 @@ export default function ProfilePage({ session }: ProfileProps) {
                                 Correo Electrónico
                             </span>
                             <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 break-all">
-                                {user?.email || "No disponible"}
+                                {profile?.email || user?.email || "No disponible"}
                             </p>
                         </div>
 
@@ -83,7 +124,7 @@ export default function ProfilePage({ session }: ProfileProps) {
                                 <Key className="h-4 w-4" />
                                 ID de Usuario
                             </span>
-                            <p className="text-xs font-mono font-semibold bg-zinc-50 dark:bg-zinc-950 px-2.5 py-1.5 rounded-lg border border-zinc-100 dark:border-zinc-800 text-zinc-850 dark:text-zinc-300 break-all select-all">
+                            <p className="text-xs font-mono font-semibold bg-zinc-50 dark:bg-zinc-950 px-2.5 py-1.5 rounded-lg border border-zinc-100 dark:border-zinc-800 text-zinc-800 dark:text-zinc-300 break-all select-all">
                                 {user?.id || "No disponible"}
                             </p>
                         </div>
@@ -120,7 +161,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     // NextAuth v5 server check inside getServerSideProps
     const session = await auth(context);
 
-    if (!session) {
+    if (!session || !session.user?.id) {
         return {
             redirect: {
                 destination: "/auth/login",
@@ -129,9 +170,31 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
 
-    return {
-        props: {
-            session,
-        },
-    };
+    try {
+        // Query the profiles table from Supabase on the server side
+        const { data: profile, error } = await supabase
+            .from("profiles")
+            .select("id, first_name, last_name, email, name, avatar_url")
+            .eq("id", session.user.id)
+            .maybeSingle();
+
+        if (error) {
+            console.error("Error fetching user profile:", error);
+        }
+
+        return {
+            props: {
+                session,
+                profile: profile || null,
+            },
+        };
+    } catch (err) {
+        console.error("Server exception fetching user profile:", err);
+        return {
+            props: {
+                session,
+                profile: null,
+            },
+        };
+    }
 };
