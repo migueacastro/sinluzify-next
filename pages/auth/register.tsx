@@ -10,7 +10,7 @@ export default function RegisterPage() {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
-    async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         setLoading(true);
         setError(null);
@@ -41,7 +41,7 @@ export default function RegisterPage() {
             if (signUpError) {
                 setError(signUpError.message);
             } else if (data?.user) {
-                router.push(`/auth/verify/verify?email=${encodeURIComponent(email)}`);
+                router.push(`/auth/verify?email=${encodeURIComponent(email)}`);
             } else {
                 setError("Ocurrió un error inesperado al registrar el usuario.");
             }
