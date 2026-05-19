@@ -91,22 +91,22 @@ export default function Home() {
                             </div>
                         </Link>
 
-                        {/* Card 3: Ver Tareas / Database Check */}
+                        {/* Card 3: Centro de Control */}
                         <Link
-                            href="/todos"
+                            href="/dashboard"
                             className="group relative rounded-2xl border border-zinc-900 bg-zinc-900/30 p-6 transition-all hover:border-zinc-800 hover:bg-zinc-900/50 hover:shadow-lg hover:shadow-zinc-950/20 backdrop-blur-xl sm:col-span-2 lg:col-span-1"
                         >
                             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-800 text-zinc-50 group-hover:bg-zinc-50 group-hover:text-zinc-950 transition-all">
-                                <ListTodo className="h-6 w-6" />
+                                <Layout className="h-6 w-6" />
                             </div>
                             <h3 className="mt-5 text-lg font-bold text-zinc-100 group-hover:text-white">
-                                Probar Conexión
+                                Centro de Control
                             </h3>
                             <p className="mt-2 text-sm text-zinc-400 leading-relaxed">
-                                Consulta la base de datos de Supabase y visualiza el listado de tareas en tiempo real desde la ruta `/todos`.
+                                Accede al centro colaborativo para reportar apagones, administrar tus grupos y coordinar jornadas en tiempo real.
                             </p>
                             <div className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-zinc-400 group-hover:text-yellow-500 transition-colors">
-                                <span>Ver listado de Tareas</span>
+                                <span>Ir al Centro de Control</span>
                                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
                             </div>
                         </Link>
