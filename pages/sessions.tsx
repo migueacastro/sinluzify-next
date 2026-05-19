@@ -259,8 +259,8 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                 {/* Floating Notification Alerts */}
                 {alert && (
                     <div className={`fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-xl px-4 py-3 shadow-lg border backdrop-blur-xl animate-bounce ${alert.type === "success"
-                            ? "bg-emerald-50/90 border-emerald-200 text-emerald-800 dark:bg-emerald-950/90 dark:border-emerald-800 dark:text-emerald-300"
-                            : "bg-red-50/90 border-red-200 text-red-800 dark:bg-red-950/90 dark:border-red-800 dark:text-red-300"
+                        ? "bg-emerald-50/90 border-emerald-200 text-emerald-800 dark:bg-emerald-950/90 dark:border-emerald-800 dark:text-emerald-300"
+                        : "bg-red-50/90 border-red-200 text-red-800 dark:bg-red-950/90 dark:border-red-800 dark:text-red-300"
                         }`}>
                         {alert.type === "success" ? <CheckCircle2 className="h-5 w-5 shrink-0" /> : <AlertTriangle className="h-5 w-5 shrink-0" />}
                         <span className="text-sm font-semibold">{alert.message}</span>
@@ -380,8 +380,8 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                         type="button"
                                         onClick={() => setStatusFilter("all")}
                                         className={`flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${statusFilter === "all"
-                                                ? "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-950"
-                                                : "bg-white border border-zinc-200 text-zinc-650 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
+                                            ? "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-950"
+                                            : "bg-white border border-zinc-200 text-zinc-650 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
                                             }`}
                                     >
                                         Todas
@@ -390,8 +390,8 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                         type="button"
                                         onClick={() => setStatusFilter("active")}
                                         className={`flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${statusFilter === "active"
-                                                ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/10"
-                                                : "bg-white border border-zinc-200 text-zinc-650 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
+                                            ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/10"
+                                            : "bg-white border border-zinc-200 text-zinc-650 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
                                             }`}
                                     >
                                         Activas
@@ -400,8 +400,8 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                         type="button"
                                         onClick={() => setStatusFilter("completed")}
                                         className={`flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${statusFilter === "completed"
-                                                ? "bg-zinc-650 text-white dark:bg-zinc-750"
-                                                : "bg-white border border-zinc-200 text-zinc-650 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
+                                            ? "bg-zinc-650 text-white dark:bg-zinc-750"
+                                            : "bg-white border border-zinc-200 text-zinc-650 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
                                             }`}
                                     >
                                         Finalizadas
@@ -472,13 +472,58 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                                             <td className="py-3.5 px-4 font-mono text-zinc-650 dark:text-zinc-300">
                                                                 {formatDuration(sess.created_at, sess.active ? null : (sess.journey?.[0]?.end || null))}
                                                             </td>
-                                                            <td className="py-3.5 px-4 font-bold text-zinc-700 dark:text-zinc-300">
-                                                                {journeys.length} {journeys.length === 1 ? "jornada" : "jornadas"}
-                                                                {activeJourneysCount > 0 && (
-                                                                    <span className="ml-2 text-[9px] text-amber-600 dark:text-amber-400 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 animate-pulse">
-                                                                        {activeJourneysCount} en tránsito
-                                                                    </span>
-                                                                )}
+                                                            <td className="relative group py-3.5 px-4 font-bold text-zinc-700 dark:text-zinc-300 cursor-help">
+                                                                <div className="flex items-center">
+                                                                    {journeys.length} {journeys.length === 1 ? "jornada" : "jornadas"}
+                                                                    {activeJourneysCount > 0 && (
+                                                                        <span className="ml-2 text-[9px] text-amber-600 dark:text-amber-400 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 animate-pulse">
+                                                                            {activeJourneysCount} en tránsito
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+
+                                                                {/* Premium Glassmorphic Tooltip */}
+                                                                <div className="absolute right-4 bottom-full mb-2 w-72 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md shadow-xl text-left text-xs font-normal z-50 opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
+                                                                    <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2 border-b border-zinc-100 dark:border-zinc-850 pb-1.5">
+                                                                        Resumen de Jornadas
+                                                                    </p>
+                                                                    {journeys.length === 0 ? (
+                                                                        <p className="text-[11px] text-zinc-400 dark:text-zinc-500 italic">Sin jornadas registradas</p>
+                                                                    ) : (
+                                                                        <div className="space-y-2 max-h-48 overflow-y-auto">
+                                                                            {journeys.map((j: any) => {
+                                                                                const memberProfile = j.profiles;
+                                                                                const memberName = memberProfile
+                                                                                    ? `${memberProfile.first_name || ""} ${memberProfile.last_name || ""}`.trim() || memberProfile.name || memberProfile.email
+                                                                                    : "Usuario desconocido";
+                                                                                return (
+                                                                                    <div key={j.id} className="flex flex-col gap-0.5 border-b border-zinc-100/50 dark:border-zinc-900/50 pb-1.5 last:border-0 last:pb-0">
+                                                                                        <div className="flex items-center justify-between gap-2">
+                                                                                            <span className="font-semibold text-zinc-800 dark:text-zinc-200 truncate max-w-[140px]">
+                                                                                                {memberName}
+                                                                                            </span>
+                                                                                            <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${j.type === "Remoto"
+                                                                                                    ? "bg-sky-500/10 text-sky-600 dark:text-sky-400"
+                                                                                                    : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                                                                                                }`}>
+                                                                                                {j.type === "Remoto" ? "Remoto" : "Presencial"}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div className="flex items-center justify-between text-[10px] text-zinc-400 dark:text-zinc-500">
+                                                                                            <span>
+                                                                                                {new Date(j.start).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}
+                                                                                                {j.end ? ` - ${new Date(j.end).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}` : " - En curso"}
+                                                                                            </span>
+                                                                                            <span className="font-mono font-medium">
+                                                                                                {formatDuration(j.start, j.end)}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                );
+                                                                            })}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </td>
                                                         </tr>
 
@@ -526,10 +571,10 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                                                                                     </td>
                                                                                                     <td className="py-2.5">
                                                                                                         <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase border ${j.type === "Remoto"
-                                                                                                                ? "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20"
-                                                                                                                : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+                                                                                                            ? "bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20"
+                                                                                                            : "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
                                                                                                             }`}>
-                                                                                                            {j.type === "Remoto" ? "🏠 Remoto" : "🏢 Presencial"}
+                                                                                                            {j.type === "Remoto" ? "Remoto" : "Presencial"}
                                                                                                         </span>
                                                                                                     </td>
                                                                                                     <td className="py-2.5 text-zinc-500 dark:text-zinc-400">

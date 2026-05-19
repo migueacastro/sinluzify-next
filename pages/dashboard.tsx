@@ -407,7 +407,7 @@ export default function DashboardPage({ session }: DashboardProps) {
         setTimeout(() => setAlert(null), 5000);
     };
 
-    // 🔨 Create a new group
+    // Create a new group
     const handleCreateGroup = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!newGroupName.trim() || !userId) return;
@@ -438,7 +438,7 @@ export default function DashboardPage({ session }: DashboardProps) {
         }
     };
 
-    // 📩 Send a group invitation
+    // Send a group invitation
     const handleSendInvite = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!inviteEmail.trim() || !selectedGroupId || !userId) return;
@@ -498,7 +498,7 @@ export default function DashboardPage({ session }: DashboardProps) {
         }
     };
 
-    // 🤝 Accept a group invitation (Triggers automatic database joining)
+    // Accept a group invitation (Triggers automatic database joining)
     const handleAcceptInvite = async (inviteId: string) => {
         setActionLoading(`accept-${inviteId}`);
         try {
@@ -520,7 +520,7 @@ export default function DashboardPage({ session }: DashboardProps) {
         }
     };
 
-    // 🚀 Start a new monitoring session
+    // Start a new monitoring session
     const handleStartSession = async () => {
         if (!selectedGroupId) return;
         setActionLoading("session");
@@ -544,7 +544,7 @@ export default function DashboardPage({ session }: DashboardProps) {
         }
     };
 
-    // 🔌 Toggle Power Outage (Uses automatic database triggers for end dates!)
+    // Toggle Power Outage (Uses automatic database triggers for end dates!)
     const handleToggleOutage = async () => {
         if (!activeSession) return;
         setActionLoading("outage");
@@ -558,7 +558,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                     .eq("id", activeOutage.id);
 
                 if (error) throw error;
-                showMsg("success", "⚡ Apagón resuelto. La base de datos registró la hora de fin automáticamente.");
+                showMsg("success", "Apagón resuelto. La base de datos registró la hora de fin automáticamente.");
             } else {
                 // Outage: Report new outage
                 const { error } = await supabase
@@ -570,7 +570,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                     });
 
                 if (error) throw error;
-                showMsg("success", "⚠️ Reporte de corte de luz enviado a la sesión del grupo.");
+                showMsg("success", "Reporte de corte de luz enviado a la sesión del grupo.");
             }
             await fetchActiveSessionData();
 
@@ -581,7 +581,7 @@ export default function DashboardPage({ session }: DashboardProps) {
         }
     };
 
-    // 🚶‍♂️ Toggle Journey (Uses automatic duplicate checker and end date triggers!)
+    // Toggle Journey (Uses automatic duplicate checker and end date triggers!)
     const handleToggleJourney = async () => {
         if (!activeSession || !userId) return;
         setActionLoading("journey");
@@ -595,7 +595,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                     .eq("id", activeJourney.id);
 
                 if (error) throw error;
-                showMsg("success", "🚶‍♂️ Jornada finalizada con éxito.");
+                showMsg("success", "Jornada finalizada con éxito.");
             } else {
                 // Start Journey: database trigger will automatically deactivate any other active journeys of this user!
                 const { error } = await supabase
@@ -609,7 +609,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                     });
 
                 if (error) throw error;
-                showMsg("success", "🚀 Jornada iniciada. El trigger cerrará automáticamente cualquier otra jornada activa.");
+                showMsg("success", "Jornada iniciada. El trigger cerrará automáticamente cualquier otra jornada activa.");
             }
             await fetchActiveSessionData();
 
@@ -1002,7 +1002,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                                                 : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
                                                                         }`}
                                                                     >
-                                                                        🏢 Presencial
+                                                                        Presencial
                                                                     </button>
                                                                     <button
                                                                         type="button"
@@ -1013,7 +1013,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                                                 : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
                                                                         }`}
                                                                     >
-                                                                        🏠 Remoto
+                                                                        Remoto
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -1083,7 +1083,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                                     </p>
                                                                     {member.activeJourney && (
                                                                         <p className="text-[9px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide mt-0.5">
-                                                                            {member.activeJourney.type === "Remoto" ? "🏠 Remoto" : "🏢 Presencial"}
+                                                                            {member.activeJourney.type === "Remoto" ? "Remoto" : "Presencial"}
                                                                         </p>
                                                                     )}
                                                                 </div>
