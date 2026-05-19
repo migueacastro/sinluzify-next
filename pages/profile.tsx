@@ -158,8 +158,8 @@ export default function ProfilePage({ session, profile }: ProfileProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    // NextAuth v5 server check inside getServerSideProps
-    const session = await auth(context);
+    // NextAuth v5 server check inside getServerSideProps (passing req and res for correct header/cookie resolution in production)
+    const session = await auth(context.req as any, context.res as any);
 
     if (!session || !session.user?.id) {
         return {

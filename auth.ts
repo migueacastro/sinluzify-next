@@ -34,6 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     name: supabaseUser.email?.split("@")[0] || "Usuario",
                     email: supabaseUser.email,
                     accessToken: supabaseSession.access_token,
+                    refreshToken: supabaseSession.refresh_token,
                 }
             }
         })
@@ -42,12 +43,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         async jwt({ token, user }) {
             if (user) {
                 token.accessToken = (user as any).accessToken;
+                token.refreshToken = (user as any).refreshToken;
                 token.id = user.id;
             }
             return token;
         },
         async session({ session, token }) {
             (session as any).accessToken = token.accessToken;
+            (session as any).refreshToken = token.refreshToken;
             if (session.user) {
                 session.user.id = token.id as string;
             }

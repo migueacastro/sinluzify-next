@@ -17,6 +17,7 @@ interface DashboardProps {
             email?: string;
         };
         accessToken?: string;
+        refreshToken?: string;
         expires?: string;
     };
 }
@@ -112,11 +113,28 @@ export default function DashboardPage({ session }: DashboardProps) {
     useEffect(() => {
         const syncSession = async () => {
             const token = session?.accessToken;
+            const refreshToken = session?.refreshToken;
+            
+            console.log("🔄 NextAuth Session sync:", { 
+                hasUser: !!session?.user,
+                userId: session?.user?.id,
+                hasAccessToken: !!token,
+                hasRefreshToken: !!refreshToken
+            });
+
             if (token) {
-                await supabase.auth.setSession({
+                const { data, error } = await supabase.auth.setSession({
                     access_token: token,
-                    refresh_token: "",
+                    refresh_token: refreshToken || "",
                 });
+                
+                if (error) {
+                    console.error("❌ Failed to synchronize Supabase session:", error.message);
+                } else {
+                    console.log("✅ Supabase session synchronized successfully. User role:", data.user?.role);
+                }
+            } else {
+                console.warn("⚠️ No access token found in NextAuth session to synchronize with Supabase.");
             }
             setSessionReady(true);
         };
@@ -1240,8 +1258,8 @@ export default function DashboardPage({ session }: DashboardProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    // NextAuth v5 server check to secure dashboard route
-    const session = await auth(context);
+    // NextAuth v5 server check to secure dashboard route (passing req and res for correct header/cookie resolution in production)
+    const session = await auth(context.req as any, context.res as any);
 
     if (!session) {
         return {
