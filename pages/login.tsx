@@ -1,3 +1,4 @@
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { SubmitEvent } from "react";
 
@@ -11,25 +12,24 @@ export default function LoginPage() {
         const email = formData.get("email")
         const password = formData.get("password")
 
-        const response = await fetch("/api/auth/login", {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password }),
+        const result = await signIn("credentials", {
+            redirect: false,
+            email,
+            password
         });
 
-        if (response.ok) {
+        if (result.ok && !result.error) {
             router.push("/profile")
         } else {
-
+            alert("Credenciales incorrectas")
         }
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '300px', margin: '50px auto' }}>
             <input type="email" name="email" id="email" placeholder="Email" required />
-            <input type="password" name="password" id="password" placeholder="Password" />
-            <button type="submit">Login</button>
+            <input type="password" name="password" id="password" placeholder="Password" required />
+            <button type="submit">Iniciar Sesión</button>
         </form>
     )
 }
