@@ -268,6 +268,48 @@ export default function DashboardPage({ session }: DashboardProps) {
         }
     }, [userId, sessionReady]);
 
+    // Subscribes to real-time updates for sessions, outages, journeys, and group members
+    useEffect(() => {
+        if (!selectedGroupId || !userId || !sessionReady) return;
+
+        // Channel name includes selectedGroupId to keep listeners scoped to the active group
+        const channel = supabase
+            .channel("group-realtime:" + selectedGroupId)
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "sessions", filter: "group_id=eq." + selectedGroupId },
+                () => {
+                    fetchActiveSessionData();
+                }
+            )
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "power_outages" },
+                () => {
+                    fetchActiveSessionData();
+                }
+            )
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "journey" },
+                () => {
+                    fetchActiveSessionData();
+                }
+            )
+            .on(
+                "postgres_changes",
+                { event: "*", schema: "public", table: "group_members", filter: "group_id=eq." + selectedGroupId },
+                () => {
+                    fetchActiveSessionData();
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [selectedGroupId, userId, sessionReady]);
+
     const showMsg = (type: "success" | "error", message: string) => {
         setAlert({ type, message });
         setTimeout(() => setAlert(null), 5000);
