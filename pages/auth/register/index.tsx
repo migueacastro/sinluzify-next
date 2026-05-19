@@ -41,7 +41,7 @@ export default function RegisterPage() {
             if (signUpError) {
                 setError(signUpError.message);
             } else if (data?.user) {
-                setSuccess(true);
+                router.push(`/auth/verify/verify?email=${encodeURIComponent(email)}`);
             } else {
                 setError("Ocurrió un error inesperado al registrar el usuario.");
             }
