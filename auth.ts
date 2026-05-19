@@ -1,8 +1,8 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { signToken, verifyToken } from "./lib/jwt";
 import { supabase } from "./lib/supabase";
 export const { handlers, signIn, signOut, auth } = NextAuth({
+    secret: process.env.AUTH_SECRET,
     providers: [
         Credentials({
             name: "Credentials",
@@ -38,17 +38,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
         })
     ],
-    jwt: {
-        // Sobrescribimos el encode/decode de NextAuth para que use tu jose
-        encode: async ({ token }) => {
-            return await signToken(token);
+    callbacks: {
+        async jwt({ token, user }) {
+            if (user) {
+                token.accessToken = (user as any).accessToken
+            }
+            return token
         },
-        decode: async ({ token }) => {
-            return await verifyToken(token as string) as any;
+        async session({ session, token }) {
+            (session as any).accessToken = token.accessToken
+            return session
         }
     },
     pages: {
-        signIn: "/login"
+        signIn: "/auth/login"
     },
     session: {
         strategy: "jwt"

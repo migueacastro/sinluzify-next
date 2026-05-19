@@ -1,22 +1,16 @@
-import { SignJWT, jwtVerify } from "jose";
+import { jwtVerify } from "jose";
 
-const JWT_SECRET = new TextEncoder().encode(
-    process.env.JWT_SECRET || "simiguelnomiguel1234"
+const SUPABASE_JWT_SECRET = new TextEncoder().encode(
+    process.env.SUPABASE_JWT_SECRET || ""
 );
 
-export async function signToken(payload: any) {
-    return await new SignJWT(payload)
-        .setProtectedHeader({ alg: "HS256" })
-        .setIssuedAt()
-        .setExpirationTime("2h")
-        .sign(JWT_SECRET)
-}
-
-export async function verifyToken(token: string) {
+export async function verifySupabaseToken(token: string) {
     try {
-        const { payload } = await jwtVerify(token, JWT_SECRET)
-        return payload
+        const { payload } = await jwtVerify(token, SUPABASE_JWT_SECRET, {
+            algorithms: ["HS256"] // Supabase usa HS256 por defecto
+        });
+        return payload;
     } catch (error) {
-        return null
+        return null; // Token manipulado, expirado o firma incorrecta
     }
 }
