@@ -6,7 +6,7 @@ export function useAuthGuard() {
     const { data: session, status } = useSession();
     const router = useRouter();
 
-    const publicRoutes = ["/auth/login", "/auth/register"];
+    const publicRoutes = ["/auth/login", "/auth/register", "/"];
     const isPublicRoute = publicRoutes.includes(router.pathname);
 
     useEffect(() => {
@@ -17,7 +17,7 @@ export function useAuthGuard() {
             router.push("/auth/login");
         } else if (session && isPublicRoute) {
             // Logged in and trying to access a public page (login / register) -> redirect to profile
-            router.push("/profile");
+            router.push("/dashboard"); // fix auth redirection to profile, go to dashboard instead
         }
     }, [session, status, router.pathname, isPublicRoute]);
 
