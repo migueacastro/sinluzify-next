@@ -517,7 +517,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                                                                 return (
                                                                                     <div key={j.id} className="flex flex-col gap-0.5 border-b border-zinc-100/50 dark:border-zinc-900/50 pb-1.5 last:border-0 last:pb-0">
                                                                                         <div className="flex items-center justify-between gap-2">
-                                                                                            <span className="font-semibold text-zinc-800 dark:text-zinc-200 truncate max-w-[140px]">
+                                                                                            <span className="font-semibold text-zinc-800 dark:text-zinc-200 truncate max-w-35">
                                                                                                 {memberName}
                                                                                             </span>
                                                                                             <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${j.type === "Remoto"

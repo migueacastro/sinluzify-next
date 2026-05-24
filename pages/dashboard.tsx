@@ -841,7 +841,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                         <button
                                             onClick={handleStartSession}
                                             disabled={actionLoading === "session"}
-                                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-tr from-yellow-500 to-amber-400 text-zinc-950 px-6 py-3 text-sm font-bold shadow-lg shadow-yellow-500/10 hover:from-yellow-400 hover:to-amber-300 disabled:opacity-50 transition-all active:scale-[0.98] cursor-pointer"
+                                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-tr from-yellow-500 to-amber-400 text-zinc-950 px-6 py-3 text-sm font-bold shadow-lg shadow-yellow-500/10 hover:from-yellow-400 hover:to-amber-300 disabled:opacity-50 transition-all active:scale-[0.98] cursor-pointer"
                                         >
                                             {actionLoading === "session" ? (
                                                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -926,7 +926,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                                 <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                                                                     Estado Actual
                                                                 </div>
-                                                                <div className="text-sm font-bold uppercase break-words leading-tight">
+                                                                <div className="text-sm font-bold uppercase wrap-break-words leading-tight">
                                                                     {activeOutage ? "SIN LUZ" : "ENERGÍA NORMAL"}
                                                                 </div>
                                                             </div>
@@ -988,7 +988,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                                 <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                                                                     Estado
                                                                 </div>
-                                                                <div className="text-sm font-bold uppercase break-words leading-tight">
+                                                                <div className="text-sm font-bold uppercase wrap-break-words leading-tight">
                                                                     {activeJourney ? "EN TRÁNSITO" : "EN ESPERA"}
                                                                 </div>
                                                             </div>
@@ -1071,7 +1071,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                         <Users className="h-4 w-4" />
                                                         Miembros del Grupo y su Estado de Tránsito
                                                     </div>
-                                                    <span className="min-w-[5rem] inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-semibold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300">
+                                                    <span className="min-w-20 inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-semibold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300">
                                                         {sessionMembers.length} {sessionMembers.length === 1 ? "miembro" : "miembros"}
                                                     </span>
                                                 </div>
@@ -1131,7 +1131,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                     <div>
                                                         <span className="font-semibold text-zinc-900 dark:text-zinc-300">Sesión ID:</span> #{activeSession.id}
                                                     </div>
-                                                    <div className="text-[10px] text-zinc-450 dark:text-zinc-500 leading-normal break-words">
+                                                    <div className="text-[10px] text-zinc-450 dark:text-zinc-500 leading-normal wrap-break-words">
                                                         Iniciada el {new Date(activeSession.created_at).toLocaleDateString("es-ES")} a las {new Date(activeSession.created_at).toLocaleTimeString("es-ES", { hour: '2-digit', minute: '2-digit' })}
                                                     </div>
                                                 </div>

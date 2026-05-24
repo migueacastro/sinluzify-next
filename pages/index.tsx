@@ -5,17 +5,17 @@ export default function Home() {
     return (
         <div className="relative min-h-screen overflow-hidden bg-zinc-950 text-zinc-50 font-sans selection:bg-zinc-50 selection:text-zinc-950">
             {/* Background decorative glowing circles */}
-            <div className="absolute top-0 -left-40 h-[600px] w-[600px] rounded-full bg-yellow-500/10 blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-0 -right-40 h-[600px] w-[600px] rounded-full bg-zinc-800/20 blur-[120px] pointer-events-none" />
+            <div className="absolute top-0 -left-40 h-150 w-150 rounded-full bg-yellow-500/10 blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-0 -right-40 h-150 w-150 rounded-full bg-zinc-800/20 blur-[120px] pointer-events-none" />
 
             <div className="relative z-10 mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
                 {/* Header/Navbar */}
                 <header className="flex items-center justify-between border-b border-zinc-900 pb-6">
                     <div className="flex items-center gap-2.5">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-yellow-500 to-amber-400 text-zinc-950 shadow-md shadow-yellow-500/10">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-tr from-yellow-500 to-amber-400 text-zinc-950 shadow-md shadow-yellow-500/10">
                             <Zap className="h-5 w-5 fill-current" />
                         </div>
-                        <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-zinc-50 to-zinc-400 bg-clip-text text-transparent">
+                        <span className="text-xl font-bold tracking-tight bg-linear-to-r from-zinc-50 to-zinc-400 bg-clip-text text-transparent">
                             SinLuzify
                         </span>
                     </div>
@@ -42,7 +42,7 @@ export default function Home() {
                         <span>Monitoreo de energía eléctrica en tiempo real</span>
                     </div>
                     
-                    <h1 className="mt-8 text-4xl font-extrabold tracking-tight sm:text-6xl bg-gradient-to-b from-zinc-50 via-zinc-100 to-zinc-500 bg-clip-text text-transparent max-w-4xl mx-auto leading-tight">
+                    <h1 className="mt-8 text-4xl font-extrabold tracking-tight sm:text-6xl bg-linear-to-b from-zinc-50 via-zinc-100 to-zinc-500 bg-clip-text text-transparent max-w-4xl mx-auto leading-tight">
                         ¿Te quedaste sin luz? Mantente informado
                     </h1>
                     <p className="mt-6 text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
