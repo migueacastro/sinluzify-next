@@ -989,7 +989,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                                     Estado
                                                                 </div>
                                                                 <div className="text-sm font-bold uppercase wrap-break-words leading-tight">
-                                                                    {activeJourney ? "EN TRÁNSITO" : "EN ESPERA"}
+                                                                    {activeJourney ? "ACTIVO" : "EN ESPERA"}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1069,7 +1069,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                                                         <Users className="h-4 w-4" />
-                                                        Miembros del Grupo y su Estado de Tránsito
+                                                        Miembros del Grupo y su Estado de Actividad
                                                     </div>
                                                     <span className="min-w-20 inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-semibold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300">
                                                         {sessionMembers.length} {sessionMembers.length === 1 ? "miembro" : "miembros"}
@@ -1111,7 +1111,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                                 {member.activeJourney ? (
                                                                     <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 dark:bg-amber-950 px-2.5 py-0.5 text-[10px] font-bold text-amber-800 dark:text-amber-400 animate-pulse">
                                                                         <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-                                                                        En Tránsito
+                                                                        Activo
                                                                     </span>
                                                                 ) : (
                                                                     <span className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 px-2.5 py-0.5 text-[10px] font-bold text-zinc-600 dark:text-zinc-400">

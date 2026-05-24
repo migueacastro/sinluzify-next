@@ -495,7 +495,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                                                     {journeys.length} {journeys.length === 1 ? "jornada" : "jornadas"}
                                                                     {activeJourneysCount > 0 && (
                                                                         <span className="ml-2 text-[9px] text-amber-600 dark:text-amber-400 font-bold bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 animate-pulse">
-                                                                            {activeJourneysCount} en tránsito
+                                                                            {activeJourneysCount} sesiones activas
                                                                         </span>
                                                                     )}
                                                                 </div>
@@ -611,7 +611,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                                                                                     <td className="py-2.5">
                                                                                                         {isJourneyActive ? (
                                                                                                             <span className="inline-flex items-center gap-1 rounded bg-amber-50 dark:bg-amber-950/20 px-1.5 py-0.5 text-[9px] font-bold text-amber-700 dark:text-amber-400 animate-pulse">
-                                                                                                                En Tránsito
+                                                                                                                Activo
                                                                                                             </span>
                                                                                                         ) : (
                                                                                                             <span className="inline-flex items-center gap-1 rounded bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 text-[9px] font-bold text-zinc-650 dark:text-zinc-400">
