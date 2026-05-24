@@ -61,7 +61,7 @@ export default function ProfilePage({ session, profile }: ProfileProps) {
                     {/* User Info Header Block */}
                     <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-zinc-100 dark:border-zinc-800/80">
                         {/* Avatar */}
-                        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-tr from-yellow-500 to-amber-400 text-zinc-950 font-black text-3xl shadow-md shadow-yellow-500/10">
+                        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-linear-to-tr from-yellow-500 to-amber-400 text-zinc-950 font-black text-3xl shadow-md shadow-yellow-500/10">
                             {getInitials()}
                         </div>
                         {/* Details */}
