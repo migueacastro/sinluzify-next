@@ -276,7 +276,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
             <div className="mx-auto max-w-6xl space-y-8">
                 {/* Floating Notification Alerts */}
                 {alert && (
-                    <div className={`fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-xl px-4 py-3 shadow-lg border backdrop-blur-xl animate-bounce ${alert.type === "success"
+                    <div className={`fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-xl px-4 py-3 shadow-lg border  animate-bounce ${alert.type === "success"
                         ? "bg-emerald-50/90 border-emerald-200 text-emerald-800 dark:bg-emerald-950/90 dark:border-emerald-800 dark:text-emerald-300"
                         : "bg-red-50/90 border-red-200 text-red-800 dark:bg-red-950/90 dark:border-red-800 dark:text-red-300"
                         }`}>
@@ -324,7 +324,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                 </div>
 
                 {/* Historial de Sesiones y Jornadas Panel */}
-                <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 dark:border-zinc-800/80 dark:bg-zinc-900/50 backdrop-blur-xl space-y-6 transition-all duration-300 w-full shadow-sm">
+                <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 dark:border-zinc-800/80 dark:bg-zinc-900/50  space-y-6 transition-all duration-300 w-full shadow-sm">
                     <button
                         onClick={() => setHistoryExpanded(!historyExpanded)}
                         className="w-full flex items-center justify-between text-sm font-bold uppercase tracking-wider text-zinc-400 hover:text-zinc-650 dark:hover:text-zinc-200 transition-colors focus:outline-none cursor-pointer"
@@ -501,7 +501,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                                                 </div>
 
                                                                 {/* Premium Glassmorphic Tooltip */}
-                                                                <div className="absolute right-4 bottom-full mb-2 w-72 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-md shadow-xl text-left text-xs font-normal z-50 opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
+                                                                <div className="absolute right-4 bottom-full mb-2 w-72 p-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-950/95  shadow-xl text-left text-xs font-normal z-50 opacity-0 pointer-events-none group-hover:opacity-100 transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
                                                                     <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-2 border-b border-zinc-100 dark:border-zinc-850 pb-1.5">
                                                                         Resumen de Jornadas
                                                                     </p>

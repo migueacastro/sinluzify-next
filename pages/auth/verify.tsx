@@ -26,7 +26,7 @@ export default function VerifyPage() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 py-12 dark:bg-zinc-950 sm:px-6 lg:px-8">
-            <div className="w-full max-w-md text-center space-y-6 rounded-2xl border border-zinc-200/80 bg-white p-8 shadow-xl shadow-zinc-200/30 dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:shadow-none backdrop-blur-xl animate-in zoom-in-95 duration-200">
+            <div className="w-full max-w-md text-center space-y-6 rounded-2xl border border-zinc-200/80 bg-white p-8 shadow-xl shadow-zinc-200/30 dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:shadow-none  animate-in zoom-in-95 duration-200">
                 {/* Icon Wrapper */}
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-yellow-500/10 text-yellow-500 shadow-inner">
                     <MailOpen className="h-8 w-8 animate-bounce duration-1000" />

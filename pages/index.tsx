@@ -37,7 +37,7 @@ export default function Home() {
 
                 {/* Hero Section */}
                 <main className="mt-20 text-center sm:mt-28">
-                    <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-1.5 text-xs text-zinc-400 backdrop-blur-md">
+                    <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-1.5 text-xs text-zinc-400 ">
                         <ZapOff className="h-3.5 w-3.5 text-yellow-500" />
                         <span>Monitoreo de energía eléctrica en tiempo real</span>
                     </div>
@@ -54,7 +54,7 @@ export default function Home() {
                         {/* Card 1: Iniciar Sesión */}
                         <Link
                             href="/auth/login"
-                            className="group relative rounded-2xl border border-zinc-900 bg-zinc-900/30 p-6 transition-all hover:border-zinc-800 hover:bg-zinc-900/50 hover:shadow-lg hover:shadow-zinc-950/20 backdrop-blur-xl"
+                            className="group relative rounded-2xl border border-zinc-900 bg-zinc-900/30 p-6 transition-all hover:border-zinc-800 hover:bg-zinc-900/50 hover:shadow-lg hover:shadow-zinc-950/20 "
                         >
                             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-800 text-zinc-50 group-hover:bg-zinc-50 group-hover:text-zinc-950 transition-all">
                                 <Layout className="h-6 w-6" />
@@ -74,7 +74,7 @@ export default function Home() {
                         {/* Card 2: Registrarse */}
                         <Link
                             href="/auth/register"
-                            className="group relative rounded-2xl border border-zinc-900 bg-zinc-900/30 p-6 transition-all hover:border-zinc-800 hover:bg-zinc-900/50 hover:shadow-lg hover:shadow-zinc-950/20 backdrop-blur-xl"
+                            className="group relative rounded-2xl border border-zinc-900 bg-zinc-900/30 p-6 transition-all hover:border-zinc-800 hover:bg-zinc-900/50 hover:shadow-lg hover:shadow-zinc-950/20 "
                         >
                             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-800 text-zinc-50 group-hover:bg-zinc-50 group-hover:text-zinc-950 transition-all">
                                 <ShieldCheck className="h-6 w-6" />
@@ -94,7 +94,7 @@ export default function Home() {
                         {/* Card 3: Centro de Control */}
                         <Link
                             href="/dashboard"
-                            className="group relative rounded-2xl border border-zinc-900 bg-zinc-900/30 p-6 transition-all hover:border-zinc-800 hover:bg-zinc-900/50 hover:shadow-lg hover:shadow-zinc-950/20 backdrop-blur-xl sm:col-span-2 lg:col-span-1"
+                            className="group relative rounded-2xl border border-zinc-900 bg-zinc-900/30 p-6 transition-all hover:border-zinc-800 hover:bg-zinc-900/50 hover:shadow-lg hover:shadow-zinc-950/20  sm:col-span-2 lg:col-span-1"
                         >
                             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-800 text-zinc-50 group-hover:bg-zinc-50 group-hover:text-zinc-950 transition-all">
                                 <Layout className="h-6 w-6" />

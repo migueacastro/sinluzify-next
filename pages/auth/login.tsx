@@ -54,7 +54,7 @@ export default function LoginPage() {
                 </div>
 
                 {/* Card Container */}
-                <div className="rounded-2xl border border-zinc-200/80 bg-white p-8 shadow-xl shadow-zinc-200/30 dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:shadow-none backdrop-blur-xl">
+                <div className="rounded-2xl border border-zinc-200/80 bg-white p-8 shadow-xl shadow-zinc-200/30 dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:shadow-none ">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* Error Alert */}
                         {error && (

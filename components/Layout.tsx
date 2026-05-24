@@ -40,7 +40,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     if (isLoading) {
         return (
-            <div className="flex min-h-[100vh] items-center justify-center bg-zinc-950 text-zinc-50">
+            <div className="flex min-h-screen items-center justify-center bg-zinc-950 text-zinc-50">
                 <div className="flex flex-col items-center gap-3">
                     {/* Premium sleek spinner */}
                     <div className="relative h-10 w-10">
@@ -58,7 +58,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-50 flex flex-col transition-colors duration-200">
             {/* Sticky Minimalist Navbar with Backdrop Blur */}
-            <nav className="border-b border-zinc-200 dark:border-zinc-900 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-md sticky top-0 z-50 transition-colors duration-200">
+            <nav className="border-b border-zinc-200 dark:border-zinc-900 bg-white/70 dark:bg-zinc-950/70 sticky top-0 z-50 transition-colors duration-200">
                 <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2 font-bold tracking-tight text-lg text-zinc-900 dark:text-white">
                         <Zap className="h-5 w-5 text-yellow-500 fill-yellow-500 animate-pulse animate-duration-1000" />

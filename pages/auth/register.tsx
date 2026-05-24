@@ -64,7 +64,7 @@ export default function RegisterPage() {
     if (success) {
         return (
             <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 py-12 dark:bg-zinc-950 sm:px-6 lg:px-8">
-                <div className="w-full max-w-md text-center space-y-6 rounded-2xl border border-zinc-200/80 bg-white p-8 shadow-xl dark:border-zinc-800/80 dark:bg-zinc-900/50 backdrop-blur-xl animate-in zoom-in-95 duration-200">
+                <div className="w-full max-w-md text-center space-y-6 rounded-2xl border border-zinc-200/80 bg-white p-8 shadow-xl dark:border-zinc-800/80 dark:bg-zinc-900/50  animate-in zoom-in-95 duration-200">
                     <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400">
                         <CheckCircle2 className="h-8 w-8" />
                     </div>
@@ -108,7 +108,7 @@ export default function RegisterPage() {
                 </div>
 
                 {/* Card Container */}
-                <div className="rounded-2xl border border-zinc-200/80 bg-white p-8 shadow-xl shadow-zinc-200/30 dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:shadow-none backdrop-blur-xl">
+                <div className="rounded-2xl border border-zinc-200/80 bg-white p-8 shadow-xl shadow-zinc-200/30 dark:border-zinc-800/80 dark:bg-zinc-900/50 dark:shadow-none ">
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {/* Error Alert */}
                         {error && (

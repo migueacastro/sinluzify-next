@@ -57,7 +57,7 @@ export default function ProfilePage({ session, profile }: ProfileProps) {
                 </div>
 
                 {/* Main Profile Card */}
-                <div className="rounded-2xl border border-zinc-200/80 bg-white p-8 dark:border-zinc-800/80 dark:bg-zinc-900/50 backdrop-blur-xl space-y-8">
+                <div className="rounded-2xl border border-zinc-200/80 bg-white p-8 dark:border-zinc-800/80 dark:bg-zinc-900/50  space-y-8">
                     {/* User Info Header Block */}
                     <div className="flex flex-col sm:flex-row items-center gap-6 pb-6 border-b border-zinc-100 dark:border-zinc-800/80">
                         {/* Avatar */}

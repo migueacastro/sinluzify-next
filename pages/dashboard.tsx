@@ -691,7 +691,7 @@ export default function DashboardPage({ session }: DashboardProps) {
             <div className="mx-auto max-w-6xl space-y-8">
                 {/* Floating Notification Alerts */}
                 {alert && (
-                    <div className={`fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-xl px-4 py-3 shadow-lg border backdrop-blur-xl animate-bounce ${alert.type === "success"
+                    <div className={`fixed bottom-5 right-5 z-50 flex items-center gap-2 rounded-xl px-4 py-3 shadow-lg border animate-bounce ${alert.type === "success"
                         ? "bg-emerald-50/90 border-emerald-200 text-emerald-800 dark:bg-emerald-950/90 dark:border-emerald-800 dark:text-emerald-300"
                         : "bg-red-50/90 border-red-200 text-red-800 dark:bg-red-950/90 dark:border-red-800 dark:text-red-300"
                         }`}>
@@ -744,7 +744,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                     {/* Left Column: Invitations Panel */}
                     {invitations.length > 0 && (
                         <div className="space-y-8 md:col-span-1">
-                            <div className="rounded-2xl border border-yellow-200 bg-yellow-50/50 p-6 dark:border-yellow-950/40 dark:bg-yellow-950/10 space-y-4 backdrop-blur-xl">
+                            <div className="rounded-2xl border border-yellow-200 bg-yellow-50/50 p-6 dark:border-yellow-950/40 dark:bg-yellow-950/10 space-y-4 ">
                                 <h3 className="flex items-center gap-2 text-sm font-bold text-yellow-800 dark:text-yellow-400">
                                     <Send className="h-4 w-4" />
                                     Invitaciones Pendientes ({invitations.length})
@@ -789,7 +789,7 @@ export default function DashboardPage({ session }: DashboardProps) {
 
                         {/* Select Group Prompt (When there are no groups selected) */}
                         {!selectedGroupId ? (
-                            <div className="rounded-2xl border border-zinc-200/80 bg-white p-12 dark:border-zinc-800/80 dark:bg-zinc-900/50 backdrop-blur-xl text-center space-y-4">
+                            <div className="rounded-2xl border border-zinc-200/80 bg-white p-12 dark:border-zinc-800/80 dark:bg-zinc-900/50  text-center space-y-4">
                                 <Users className="mx-auto h-12 w-12 text-zinc-400 animate-pulse" />
                                 <h3 className="text-lg font-bold">No tienes ningún grupo todavía</h3>
                                 <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto">
@@ -799,7 +799,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                         ) : (
 
                             /* Interactive Session Monitor Board */
-                            <div className="rounded-2xl border border-zinc-200/80 bg-white p-8 dark:border-zinc-800/80 dark:bg-zinc-900/50 backdrop-blur-xl space-y-8">
+                            <div className="rounded-2xl border border-zinc-200/80 bg-white p-8 dark:border-zinc-800/80 dark:bg-zinc-900/50  space-y-8">
 
                                 {/* Header Details */}
                                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-6 border-b border-zinc-100 dark:border-zinc-800/80">
@@ -879,7 +879,7 @@ export default function DashboardPage({ session }: DashboardProps) {
 
                                         {/* Large Dynamic Live Journey (Jornada) Timer */}
                                         {activeJourney && journeyTimeText && (
-                                            <div className="rounded-2xl border border-amber-250/20 bg-amber-500/5 p-5 dark:border-amber-900/30 dark:bg-amber-950/10 flex flex-col sm:flex-row items-center justify-between gap-4 backdrop-blur-xl">
+                                            <div className="rounded-2xl border border-amber-250/20 bg-amber-500/5 p-5 dark:border-amber-900/30 dark:bg-amber-950/10 flex flex-col sm:flex-row items-center justify-between gap-4 ">
                                                 <div className="flex items-center gap-3">
                                                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0">
                                                         <Compass className="h-5 w-5 animate-spin-slow text-amber-500" />
@@ -1163,7 +1163,7 @@ export default function DashboardPage({ session }: DashboardProps) {
 
 
                                 {/* Administrar Grupos Panel (Debajo de la tarjeta principal, w-full) */}
-                <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 dark:border-zinc-800/80 dark:bg-zinc-900/50 backdrop-blur-xl space-y-6 transition-all duration-300 w-full shadow-sm">
+                <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 dark:border-zinc-800/80 dark:bg-zinc-900/50  space-y-6 transition-all duration-300 w-full shadow-sm">
                     <button
                         onClick={() => setGroupsExpanded(!groupsExpanded)}
                         className="w-full flex items-center justify-between text-sm font-bold uppercase tracking-wider text-zinc-400 hover:text-zinc-650 dark:hover:text-zinc-200 transition-colors focus:outline-none cursor-pointer"
