@@ -82,7 +82,7 @@ export default function LoginPage() {
                                         required
                                         placeholder="tu@ejemplo.com"
                                         disabled={loading}
-                                        className="block w-full rounded-lg border border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm text-zinc-900 placeholder-zinc-400 outline-none transition-all focus:border-zinc-900 focus:bg-white focus:ring-1 focus:ring-zinc-900 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950/50 dark:text-zinc-50 dark:focus:border-zinc-50 dark:focus:bg-zinc-950 dark:focus:ring-zinc-50"
+                                        className="block w-full rounded-lg border border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm text-zinc-900 placeholder-zinc-400 outline-none transition-all focus:border-yellow-500 focus:bg-white focus:ring-1 focus:ring-yellow-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950/50 dark:text-zinc-50 dark:focus:border-yellow-400 dark:focus:bg-zinc-950 dark:focus:ring-yellow-400"
                                     />
                                 </div>
                             </div>
@@ -106,7 +106,7 @@ export default function LoginPage() {
                                         required
                                         placeholder="••••••••"
                                         disabled={loading}
-                                        className="block w-full rounded-lg border border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm text-zinc-900 placeholder-zinc-400 outline-none transition-all focus:border-zinc-900 focus:bg-white focus:ring-1 focus:ring-zinc-900 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950/50 dark:text-zinc-50 dark:focus:border-zinc-50 dark:focus:bg-zinc-950 dark:focus:ring-zinc-50"
+                                        className="block w-full rounded-lg border border-zinc-200 bg-zinc-50/50 py-2.5 pl-10 pr-3 text-sm text-zinc-900 placeholder-zinc-400 outline-none transition-all focus:border-yellow-500 focus:bg-white focus:ring-1 focus:ring-yellow-500 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950/50 dark:text-zinc-50 dark:focus:border-yellow-400 dark:focus:bg-zinc-950 dark:focus:ring-yellow-400"
                                     />
                                 </div>
                             </div>

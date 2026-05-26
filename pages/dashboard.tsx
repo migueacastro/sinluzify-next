@@ -114,8 +114,8 @@ export default function DashboardPage({ session }: DashboardProps) {
         const syncSession = async () => {
             const token = session?.accessToken;
             const refreshToken = session?.refreshToken;
-            
-            console.log("🔄 NextAuth Session sync:", { 
+
+            console.log("🔄 NextAuth Session sync:", {
                 hasUser: !!session?.user,
                 userId: session?.user?.id,
                 hasAccessToken: !!token,
@@ -127,7 +127,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                     access_token: token,
                     refresh_token: refreshToken || "",
                 });
-                
+
                 if (error) {
                     console.error("❌ Failed to synchronize Supabase session:", error.message);
                 } else {
@@ -701,7 +701,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                 )}
 
                 {/* Dashboard Header */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6 border-b border-zinc-200 dark:border-zinc-900">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-6">
                     <div className="space-y-1">
                         <h1 className="text-3xl font-extrabold tracking-tight">Centro de Control</h1>
                         <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -715,7 +715,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                         <select
                             value={selectedGroupId}
                             onChange={(e) => setSelectedGroupId(e.target.value)}
-                            className="block rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold shadow-sm focus:border-zinc-400 focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 cursor-pointer"
+                            className="block rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold shadow-sm focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 cursor-pointer"
                         >
                             {[...ownedGroups, ...joinedGroups].length === 0 && (
                                 <option value="">Sin grupos. Crea uno abajo</option>
@@ -859,7 +859,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                     <div className="space-y-6">
                                         {/* Reduced Live Session Timer */}
                                         {elapsedTimeText && (
-                                            <div className="rounded-xl border border-zinc-150 bg-zinc-50/50 p-4 dark:border-zinc-800/80 dark:bg-zinc-950/20 flex flex-row items-center justify-between gap-4">
+                                            <div className="rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800/80 dark:bg-zinc-950/20 flex flex-row items-center justify-between gap-4">
                                                 <div className="flex items-center gap-2.5 min-w-0">
                                                     <Clock className="h-4 w-4 text-zinc-500 dark:text-zinc-400 animate-pulse shrink-0" />
                                                     <div className="text-left min-w-0">
@@ -904,7 +904,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                             {/* Horizontal Flex container for Box A and Box B */}
                                             <div className="flex flex-col md:flex-row gap-6 w-full">
                                                 {/* Box A: Power Outage Reporter (power_outages table + trigger) */}
-                                                <div className="flex-1 rounded-xl border border-zinc-150 bg-zinc-50/50 p-6 dark:border-zinc-800/80 dark:bg-zinc-950/20 space-y-6 flex flex-col justify-between">
+                                                <div className="flex-1 rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800/80 dark:bg-zinc-950/20 space-y-6 flex flex-col justify-between">
                                                     <div className="space-y-4">
                                                         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                                                             <Zap className="h-4 w-4" />
@@ -966,7 +966,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                 </div>
 
                                                 {/* Box B: Shift / Journey Tracker (journey table + triggers) */}
-                                                <div className="flex-1 rounded-xl border border-zinc-150 bg-zinc-50/50 p-6 dark:border-zinc-800/80 dark:bg-zinc-950/20 space-y-6 flex flex-col justify-between">
+                                                <div className="flex-1 rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800/80 dark:bg-zinc-950/20 space-y-6 flex flex-col justify-between">
                                                     <div className="space-y-4">
                                                         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                                                             <Compass className="h-4 w-4" />
@@ -1006,7 +1006,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                                 </div>
                                                             </div>
                                                         ) : (
-                                                            <div className="space-y-2 pt-1.5 border-t border-zinc-150/40 dark:border-zinc-800/30">
+                                                            <div className="space-y-2 pt-1.5 border-t border-zinc-200/40 dark:border-zinc-800/30">
                                                                 <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                                                                     Tipo de Jornada
                                                                 </label>
@@ -1014,22 +1014,20 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                                     <button
                                                                         type="button"
                                                                         onClick={() => setJourneyType("Presencial")}
-                                                                        className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                                                                            journeyType === "Presencial"
-                                                                                ? "bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400"
-                                                                                : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
-                                                                        }`}
+                                                                        className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${journeyType === "Presencial"
+                                                                            ? "bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400"
+                                                                            : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
+                                                                            }`}
                                                                     >
                                                                         Presencial
                                                                     </button>
                                                                     <button
                                                                         type="button"
                                                                         onClick={() => setJourneyType("Remoto")}
-                                                                        className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${
-                                                                            journeyType === "Remoto"
-                                                                                ? "bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400"
-                                                                                : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
-                                                                        }`}
+                                                                        className={`flex-1 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer ${journeyType === "Remoto"
+                                                                            ? "bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400"
+                                                                            : "bg-white border-zinc-200 text-zinc-600 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
+                                                                            }`}
                                                                     >
                                                                         Remoto
                                                                     </button>
@@ -1065,7 +1063,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                             </div>
 
                                             {/* Box C: Live Group Members Tracker */}
-                                            <div className="w-full rounded-xl border border-zinc-150 bg-zinc-50/50 p-6 dark:border-zinc-800/80 dark:bg-zinc-950/20 space-y-6">
+                                            <div className="w-full rounded-xl border border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800/80 dark:bg-zinc-950/20 space-y-6">
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                                                         <Users className="h-4 w-4" />
@@ -1162,7 +1160,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                 </div>
 
 
-                                {/* Administrar Grupos Panel (Debajo de la tarjeta principal, w-full) */}
+                {/* Administrar Grupos Panel (Debajo de la tarjeta principal, w-full) */}
                 <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 dark:border-zinc-800/80 dark:bg-zinc-900/50  space-y-6 transition-all duration-300 w-full shadow-sm">
                     <button
                         onClick={() => setGroupsExpanded(!groupsExpanded)}
@@ -1196,7 +1194,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                             value={newGroupName}
                                             onChange={(e) => setNewGroupName(e.target.value)}
                                             placeholder="Ej. Casa, Trabajo, Familia"
-                                            className="block w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-950 dark:text-zinc-50 placeholder-zinc-400 focus:border-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none dark:border-zinc-800 dark:bg-zinc-950 dark:placeholder-zinc-600 dark:focus:border-zinc-700"
+                                            className="block w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-950 dark:text-zinc-50 placeholder-zinc-400 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none dark:border-zinc-800 dark:bg-zinc-950 dark:placeholder-zinc-600 dark:focus:border-yellow-400 dark:focus:ring-yellow-400"
                                         />
                                     </div>
                                     <button
@@ -1229,7 +1227,7 @@ export default function DashboardPage({ session }: DashboardProps) {
                                                 value={inviteEmail}
                                                 onChange={(e) => setInviteEmail(e.target.value)}
                                                 placeholder="correo@ejemplo.com"
-                                                className="block w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-950 dark:text-zinc-50 placeholder-zinc-400 focus:border-zinc-400 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none dark:border-zinc-800 dark:bg-zinc-950 dark:placeholder-zinc-600 dark:focus:border-zinc-700"
+                                                className="block w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-950 dark:text-zinc-50 placeholder-zinc-400 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 focus:bg-white dark:focus:bg-zinc-900 focus:outline-none dark:border-zinc-800 dark:bg-zinc-950 dark:placeholder-zinc-600 dark:focus:border-yellow-400 dark:focus:ring-yellow-400"
                                             />
                                         </div>
                                         <button

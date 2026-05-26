@@ -132,7 +132,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="p-1.5 rounded-lg border border-zinc-205 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 text-zinc-650 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-all cursor-pointer"
+                            className="p-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 hover:bg-zinc-100 dark:hover:bg-zinc-800/80 text-zinc-650 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-all cursor-pointer"
                             aria-label="Menú"
                         >
                             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import { supabase } from "@/lib/supabase";
 import {
     Zap, ZapOff, Users, Loader2, ChevronDown, ChevronUp,
-    History, Search, Calendar, Compass, Clock, AlertTriangle, CheckCircle2
+    History, Search, Calendar, Compass, Clock, AlertTriangle, CheckCircle2, Download
 } from "lucide-react";
 
 interface SessionsProps {
@@ -71,7 +71,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
             const token = session?.accessToken;
             const refreshToken = session?.refreshToken;
 
-            console.log("🔄 NextAuth Session sync (Sessions Page):", { 
+            console.log("🔄 NextAuth Session sync (Sessions Page):", {
                 hasUser: !!session?.user,
                 userId: session?.user?.id,
                 hasAccessToken: !!token,
@@ -213,6 +213,101 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
         };
     }, [selectedGroupId, userId, sessionReady]);
 
+    // Export session history to CSV
+    const exportToCSV = () => {
+        const filtered = getFilteredSessions();
+        if (filtered.length === 0) {
+            showMsg("error", "No hay datos para exportar");
+            return;
+        }
+
+        // CSV Header
+        const headers = [
+            "ID Sesión",
+            "Fecha Sesión",
+            "Estado Sesión",
+            "Inicio Sesión",
+            "Duración Sesión",
+            "ID Jornada",
+            "Miembro",
+            "Email",
+            "Tipo Jornada",
+            "Inicio Jornada",
+            "Fin Jornada",
+            "Duración Jornada",
+            "Estado Jornada"
+        ];
+
+        const rows: string[][] = [];
+
+        filtered.forEach((sess) => {
+            const sessionDate = new Date(sess.created_at).toLocaleDateString("es-ES");
+            const sessionStatus = sess.active ? "ACTIVA" : "FINALIZADA";
+            const sessionStart = new Date(sess.created_at).toLocaleTimeString("es-ES");
+            const sessionDuration = formatDuration(sess.created_at, sess.active ? null : (sess.journey?.[0]?.end || null));
+
+            const journeys = sess.journey || [];
+            if (journeys.length === 0) {
+                // Row with just session info if no journeys
+                rows.push([
+                    sess.id.toString(),
+                    sessionDate,
+                    sessionStatus,
+                    sessionStart,
+                    sessionDuration,
+                    "", "", "", "", "", "", "", ""
+                ]);
+            } else {
+                journeys.forEach((j: any) => {
+                    const memberProfile = j.profiles;
+                    const memberName = memberProfile
+                        ? `${memberProfile.first_name || ""} ${memberProfile.last_name || ""}`.trim() || memberProfile.name || memberProfile.email
+                        : "Usuario desconocido";
+                    const memberEmail = memberProfile?.email || "";
+                    const journeyType = j.type || "";
+                    const journeyStart = new Date(j.start).toLocaleTimeString("es-ES");
+                    const journeyEnd = j.end ? new Date(j.end).toLocaleTimeString("es-ES") : "En curso";
+                    const journeyDuration = formatDuration(j.start, j.end);
+                    const journeyStatus = j.active ? "ACTIVO" : "COMPLETADA";
+
+                    rows.push([
+                        sess.id.toString(),
+                        sessionDate,
+                        sessionStatus,
+                        sessionStart,
+                        sessionDuration,
+                        j.id.toString(),
+                        memberName,
+                        memberEmail,
+                        journeyType,
+                        journeyStart,
+                        journeyEnd,
+                        journeyDuration,
+                        journeyStatus
+                    ]);
+                });
+            }
+        });
+
+        // Combine header and rows with UTF-8 BOM for Excel compatibility
+        const csvContent = "\uFEFF" + [
+            headers.join(","),
+            ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+        ].join("\n");
+
+        // Create download link
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `historial_sesiones_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showMsg("success", "Exportación completada");
+    };
+
     // Filter session history based on query, status, and date range
     const getFilteredSessions = () => {
         return sessionHistory.filter((sess) => {
@@ -300,7 +395,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                         <select
                             value={selectedGroupId}
                             onChange={(e) => setSelectedGroupId(e.target.value)}
-                            className="block rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold shadow-sm focus:border-zinc-400 focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 cursor-pointer"
+                            className="block rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold shadow-sm focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-50 cursor-pointer"
                         >
                             {[...ownedGroups, ...joinedGroups].length === 0 && (
                                 <option value="">Sin grupos</option>
@@ -324,7 +419,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                 </div>
 
                 {/* Historial de Sesiones y Jornadas Panel */}
-                <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 dark:border-zinc-800/80 dark:bg-zinc-900/50  space-y-6 transition-all duration-300 w-full shadow-sm">
+                <div className="rounded-2xl  bg-white p-6 dark:border-zinc-800/80 dark:bg-zinc-900/50  space-y-6 transition-all duration-300 w-full shadow-sm">
                     <button
                         onClick={() => setHistoryExpanded(!historyExpanded)}
                         className="w-full flex items-center justify-between text-sm font-bold uppercase tracking-wider text-zinc-400 hover:text-zinc-650 dark:hover:text-zinc-200 transition-colors focus:outline-none cursor-pointer"
@@ -343,7 +438,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                     {historyExpanded && (
                         <div className="space-y-6 pt-2 animate-fadeIn">
                             {/* Search & Date Range Filters & Status Tabs */}
-                            <div className="flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center bg-zinc-50/50 dark:bg-zinc-950/20 p-4 rounded-xl border border-zinc-150 dark:border-zinc-850">
+                            <div className="flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center bg-zinc-50/50 dark:bg-zinc-950/20 p-4 rounded-xl ">
                                 <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center flex-1">
                                     {/* Search Input */}
                                     <div className="relative w-full sm:w-64">
@@ -353,13 +448,13 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                             value={sessionSearch}
                                             onChange={(e) => setSessionSearch(e.target.value)}
                                             placeholder="Buscar por miembro, jornada..."
-                                            className="pl-9 pr-4 py-2 w-full text-xs rounded-lg border border-zinc-200 bg-white text-zinc-950 dark:text-zinc-50 placeholder-zinc-400 focus:border-zinc-400 focus:outline-none dark:border-zinc-800 dark:bg-zinc-950 dark:placeholder-zinc-600 dark:focus:border-zinc-700"
+                                            className="pl-9 pr-4 py-2 w-full text-xs rounded-lg border border-zinc-200 bg-white text-zinc-950 dark:text-zinc-50 placeholder-zinc-400 focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500 focus:outline-none dark:border-zinc-800 dark:bg-zinc-950 dark:placeholder-zinc-600 dark:focus:border-yellow-400 dark:focus:ring-yellow-400"
                                         />
                                     </div>
 
                                     {/* Date Range Picker */}
                                     <div className="flex flex-wrap items-center gap-2">
-                                        <div className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-2.5 py-1.5 shadow-sm">
+                                        <div className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500 dark:border-zinc-800 dark:focus-within:border-yellow-400 dark:focus-within:ring-yellow-400 rounded-lg px-2.5 py-1.5 shadow-sm">
                                             <Calendar className="h-3.5 w-3.5 text-zinc-400" />
                                             <input
                                                 type="date"
@@ -369,7 +464,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                             />
                                         </div>
                                         <span className="text-zinc-400 text-[10px] font-bold uppercase tracking-wider">al</span>
-                                        <div className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-2.5 py-1.5 shadow-sm">
+                                        <div className="flex items-center gap-2 bg-white dark:bg-zinc-900 border border-zinc-200 focus-within:border-yellow-500 focus-within:ring-1 focus-within:ring-yellow-500 dark:border-zinc-800 dark:focus-within:border-yellow-400 dark:focus-within:ring-yellow-400 rounded-lg px-2.5 py-1.5 shadow-sm">
                                             <Calendar className="h-3.5 w-3.5 text-zinc-400" />
                                             <input
                                                 type="date"
@@ -396,10 +491,18 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                 <div className="flex gap-2 shrink-0">
                                     <button
                                         type="button"
+                                        onClick={exportToCSV}
+                                        className="flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer bg-linear-to-tr from-yellow-500 to-amber-400 text-zinc-950 shadow-md shadow-yellow-500/10 hover:from-yellow-400 hover:to-amber-300 flex items-center gap-2 justify-center"
+                                    >
+                                        <Download className="h-3.5 w-3.5" />
+                                        Exportar CSV
+                                    </button>
+                                    <button
+                                        type="button"
                                         onClick={() => setStatusFilter("all")}
                                         className={`flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${statusFilter === "all"
-                                            ? "bg-zinc-900 text-white dark:bg-zinc-50 dark:text-zinc-950"
-                                            : "bg-white border border-zinc-200 text-zinc-650 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
+                                            ? "bg-yellow-500 text-zinc-950 shadow-md shadow-yellow-500/10"
+                                            : "bg-zinc-100 text-zinc-650 hover:bg-zinc-200 dark:bg-zinc-900/40 dark:text-zinc-400 dark:hover:bg-zinc-800/85"
                                             }`}
                                     >
                                         Todas
@@ -409,7 +512,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                         onClick={() => setStatusFilter("active")}
                                         className={`flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${statusFilter === "active"
                                             ? "bg-emerald-600 text-white shadow-lg shadow-emerald-600/10"
-                                            : "bg-white border border-zinc-200 text-zinc-650 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
+                                            : "bg-zinc-100 text-zinc-650 hover:bg-zinc-200 dark:bg-zinc-900/40 dark:text-zinc-400 dark:hover:bg-zinc-800/85"
                                             }`}
                                     >
                                         Activas
@@ -419,7 +522,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                         onClick={() => setStatusFilter("completed")}
                                         className={`flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${statusFilter === "completed"
                                             ? "bg-zinc-650 text-white dark:bg-zinc-750"
-                                            : "bg-white border border-zinc-200 text-zinc-650 hover:bg-zinc-50 dark:bg-zinc-900/40 dark:border-zinc-800 dark:text-zinc-450 dark:hover:bg-zinc-900/80"
+                                            : "bg-zinc-100 text-zinc-650 hover:bg-zinc-200 dark:bg-zinc-900/40 dark:text-zinc-400 dark:hover:bg-zinc-800/85"
                                             }`}
                                     >
                                         Finalizadas
@@ -428,10 +531,10 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                             </div>
 
                             {/* Main DataTable */}
-                            <div className="overflow-x-auto rounded-xl border border-zinc-150 dark:border-zinc-800/80">
+                            <div className="overflow-x-auto rounded-xl dark:border dark:border-zinc-800/80">
                                 <table className="w-full text-left border-collapse">
                                     <thead>
-                                        <tr className="bg-zinc-100/50 dark:bg-zinc-950/40 text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 border-b border-zinc-150 dark:border-zinc-800/80">
+                                        <tr className="bg-zinc-100/50 dark:bg-zinc-950/40 text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 border-b border-transparent dark:border-zinc-800/80">
                                             <th className="py-3 px-4 w-12 text-center"></th>
                                             <th className="py-3 px-4">ID de Sesión</th>
                                             <th className="py-3 px-4">Fecha</th>
@@ -441,7 +544,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                             <th className="py-3 px-4">Jornadas</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-zinc-150 dark:divide-zinc-800/60 text-xs">
+                                    <tbody className="divide-y divide-transparent dark:divide-zinc-800/60 text-xs">
                                         {getFilteredSessions().length === 0 ? (
                                             <tr>
                                                 <td colSpan={7} className="py-8 text-center text-zinc-400 dark:text-zinc-500 font-medium">
@@ -521,8 +624,8 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                                                                                 {memberName}
                                                                                             </span>
                                                                                             <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${j.type === "Remoto"
-                                                                                                    ? "bg-sky-500/10 text-sky-600 dark:text-sky-400"
-                                                                                                    : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                                                                                                ? "bg-sky-500/10 text-sky-600 dark:text-sky-400"
+                                                                                                : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
                                                                                                 }`}>
                                                                                                 {j.type === "Remoto" ? "Remoto" : "Presencial"}
                                                                                             </span>
@@ -548,8 +651,8 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                                         {/* Nested Journeys table when expanded */}
                                                         {isExpanded && (
                                                             <tr>
-                                                                <td colSpan={7} className="p-4 bg-zinc-50/30 dark:bg-zinc-950/10 border-t border-b border-zinc-150 dark:border-zinc-800/80">
-                                                                    <div className="space-y-3 rounded-lg border border-zinc-200/60 dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 p-4">
+                                                                <td colSpan={7} className="p-4 bg-zinc-50/30 dark:bg-zinc-950/10 dark:border-t dark:border-b dark:border-zinc-800/80">
+                                                                    <div className="space-y-3 rounded-lg dark:border dark:border-zinc-800/80 bg-white dark:bg-zinc-900/40 p-4">
                                                                         <div className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-1.5">
                                                                             <Compass className="h-3.5 w-3.5" />
                                                                             Desglose de Jornadas de la Sesión #{sess.id}
@@ -562,7 +665,7 @@ export default function SessionsHistoryPage({ session }: SessionsProps) {
                                                                             <div className="overflow-x-auto">
                                                                                 <table className="w-full text-left text-xs border-collapse">
                                                                                     <thead>
-                                                                                        <tr className="text-[9px] font-bold uppercase text-zinc-400 dark:text-zinc-500 border-b border-zinc-100 dark:border-zinc-800/40">
+                                                                                        <tr className="text-[9px] font-bold uppercase text-zinc-400 dark:text-zinc-500 border-b dark:border-zinc-800/40">
                                                                                             <th className="pb-2">Miembro</th>
                                                                                             <th className="pb-2">Tipo</th>
                                                                                             <th className="pb-2">Inicio</th>
